@@ -6,7 +6,6 @@ def get_files(source_dir = os.getcwd()):
 
     file_list = []
     dir_list = [source_dir,]
-    obj_list = os.listdir(source_dir)
     index = 0
 
     while len(dir_list) > 0:
@@ -23,3 +22,23 @@ def get_files(source_dir = os.getcwd()):
                 obj_ignor = obj_list.pop(index)
 
     return file_list
+
+def get_file_content(file_name):
+
+    try:
+        with open(file_name, 'r', encoding='utf-8') as file:
+            content = file.read()
+    except FileNotFoundError:
+        print(f"Файл {file_name} не найден.")
+    except IOError:
+        print(f"Ошибка при чтении файла {file_name}.")
+
+    return content
+
+def get_json_from_list(file_list = get_files(os.getcwd())):
+
+    json_content = ''
+    while len(file_list) > 0:
+        file_name = file_list.pop(0)
+        json_content = json_content + '{"file_name": "' + file_name + '", "file_content": "' + get_file_content(file_name) + '"}, '
+    return '[' + json_content + ']'
